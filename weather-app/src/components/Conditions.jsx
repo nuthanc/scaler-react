@@ -1,4 +1,4 @@
-const Conditions = () => {
+const Conditions = ({ currentWeather }) => {
   return <div>Conditions</div>;
 };
 

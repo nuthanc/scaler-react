@@ -10,7 +10,7 @@ const CityWeather = ({ currentWeather }) => {
           <Heading size="lg">{currentWeather?.name}</Heading>
           <Text fontSize="md">{currentWeather?.weather?.[0]?.description}</Text>
           <Text fontSize="lg" as={'b'}>
-            {currentWeather?.main?.temp}
+            {currentWeather?.main?.temp} °C
           </Text>
         </Box>
         <img

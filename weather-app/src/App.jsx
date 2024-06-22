@@ -1,9 +1,6 @@
-import { Box, Center, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, Spinner, Text } from '@chakra-ui/react';
 import SearchBar from './components/SearchBar';
 import CityWeather from './components/CityWeather';
-import ForecastToday from './components/ForecastToday';
-import Conditions from './components/Conditions';
-import WeekForecast from './components/WeekForecast';
 import { useEffect, useState } from 'react';
 import { CURRENT_WEATHER_URL, HOURLY_WEATHER_URL } from './utils/constants';
 
@@ -11,7 +8,7 @@ const App = () => {
   const [city, setCity] = useState('');
   const [weatherData, setWeatherData] = useState(null);
   const [location, setLocation] = useState(null);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const handleSuccess = (position) => {
@@ -20,14 +17,12 @@ const App = () => {
     };
 
     const handleError = (error) => {
-      setError(error.message);
+      console.error(error.message);
     };
 
     const getLocation = () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(handleSuccess, handleError);
-      } else {
-        setError('Geolocation is not supported by this browser.');
       }
     };
     getLocation();
@@ -35,6 +30,7 @@ const App = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       if (location) {
         const params = city
           ? `&q=${city}`
@@ -51,8 +47,10 @@ const App = () => {
             current: currentWeatherData,
             hourly: hourlyWeatherData,
           });
+          setLoading(false);
         } catch (error) {
           console.error('Error fetching weather data', error);
+          setLoading(false);
         }
       }
     };
@@ -60,20 +58,22 @@ const App = () => {
   }, [city, location]);
 
   return (
-    <Box p={3} w={'100%'} h={'100vh'}>
+    <Flex direction={'column'} align={'center'} m={5}>
+      <Heading mb={4}>Weather App</Heading>
       <SearchBar setCity={setCity} />
-      {error && <Text color="red.500">{error}</Text>}
-      <Flex gap="20px">
-        <Flex direction={'column'} flex={'2'}>
-          <CityWeather currentWeather={weatherData?.current} />
-          <ForecastToday hourlyWeather={weatherData?.hourly} />
-          <Conditions currentWeather={weatherData?.current} />
-        </Flex>
-        <Center bg="green.500" flex={'1'}>
-          <WeekForecast />
-        </Center>
-      </Flex>
-    </Box>
+
+      {!loading ? (
+        <CityWeather currentWeather={weatherData?.current} />
+      ) : (
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />
+      )}
+    </Flex>
   );
 };
 

@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Spinner, Text } from '@chakra-ui/react';
+import { Flex, Heading, Spinner } from '@chakra-ui/react';
 import SearchBar from './components/SearchBar';
 import CityWeather from './components/CityWeather';
 import { useEffect, useState } from 'react';

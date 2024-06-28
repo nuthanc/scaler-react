@@ -1,4 +1,4 @@
-import { Flex, Heading, Spinner } from '@chakra-ui/react';
+import { Box, Flex, Heading, Spinner } from '@chakra-ui/react';
 import SearchBar from './components/SearchBar';
 import CityWeather from './components/CityWeather';
 import { useEffect, useState } from 'react';
@@ -58,22 +58,24 @@ const App = () => {
   }, [city, location]);
 
   return (
-    <Flex direction={'column'} align={'center'} m={5}>
-      <Heading mb={4}>Weather App</Heading>
-      <SearchBar setCity={setCity} />
-
-      {!loading ? (
-        <CityWeather currentWeather={weatherData?.current} />
-      ) : (
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
-      )}
-    </Flex>
+    <Box bgColor={'black'} h={'100vh'} w={'100%'} p={'30px'}>
+      <Flex direction={'column'} align={'center'}>
+        <SearchBar setCity={setCity} />
+      </Flex>
+      <Box>
+        {!loading ? (
+          <CityWeather currentWeather={weatherData?.current} />
+        ) : (
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+        )}
+      </Box>
+    </Box>
   );
 };
 

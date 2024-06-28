@@ -5,8 +5,8 @@ import { getIconUrl } from '../utils/constants';
 const CityWeather = ({ currentWeather }) => {
   return (
     currentWeather && (
-      <Flex justify="center" mb={4}>
-        <Box>
+      <Flex justify="space-around" mb={4}>
+        <Box color={'white'}>
           <Heading size="lg">{currentWeather?.name}</Heading>
           <Text fontSize="md">{currentWeather?.weather?.[0]?.description}</Text>
           <Text fontSize="lg" as={'b'}>

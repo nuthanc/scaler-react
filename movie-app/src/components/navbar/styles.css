@@ -1,0 +1,24 @@
+nav.navbar-container {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+nav.navbar-container .navbar-right-container .links-container {
+  display: flex;
+  list-style: none;
+  justify-content: space-evenly;
+  gap: 20px;
+}
+
+nav.navbar-container .navbar-right-container .links-container a {
+  text-decoration: none;
+  padding: 6px;
+  border-radius: 5px;
+}
+
+nav.navbar-container .navbar-right-container .links-container a.active {
+  background-color: black;
+  color: white;
+}

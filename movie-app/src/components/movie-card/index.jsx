@@ -11,9 +11,8 @@ import BookmarkRemoveIcon from '@mui/icons-material/BookmarkRemove';
 
 import { apiInstance, POSTER_BASE_URL } from '../../api';
 
-const MovieCard = ({ movie, fromWatchList, setCount }) => {
+const MovieCard = ({ movie, fromWatchList }) => {
   const handleBookmarkClick = (movieId, fromWatchList) => {
-    setCount((count) => (fromWatchList ? count - 1 : count + 1));
     apiInstance.post('/account/21311488/watchlist', {
       media_type: 'movie',
       media_id: movieId,
@@ -72,7 +71,6 @@ const MovieCard = ({ movie, fromWatchList, setCount }) => {
 MovieCard.propTypes = {
   movie: PropTypes.object,
   fromWatchList: PropTypes.bool,
-  setCount: PropTypes.func,
 };
 
 export default MovieCard;

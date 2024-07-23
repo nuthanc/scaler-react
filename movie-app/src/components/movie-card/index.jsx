@@ -11,21 +11,23 @@ import BookmarkRemoveIcon from '@mui/icons-material/BookmarkRemove';
 
 import { apiInstance, POSTER_BASE_URL } from '../../api';
 
-const MovieCard = ({ movie, fromWatchList }) => {
+const MovieCard = ({ movie, fromWatchList, refetch = () => {} }) => {
   const handleBookmarkClick = (movieId, fromWatchList) => {
-    apiInstance.post('/account/21311488/watchlist', {
-      media_type: 'movie',
-      media_id: movieId,
-      watchlist: !fromWatchList,
-    });
+    apiInstance
+      .post('/account/21311488/watchlist', {
+        media_type: 'movie',
+        media_id: movieId,
+        watchlist: !fromWatchList,
+      })
+      .finally(() => refetch());
   };
 
   return (
-    <Card sx={{ maxWidth: 200, height: 380 }}>
+    <Card sx={{ width: 200, height: 380 }}>
       <CardMedia
         component="img"
         alt={movie?.title}
-        height="200"
+        height="220"
         image={POSTER_BASE_URL + movie?.poster_path}
       />
       <CardContent>
@@ -46,7 +48,7 @@ const MovieCard = ({ movie, fromWatchList }) => {
             width: 150,
             overflow: 'clip',
             textOverflow: 'ellipsis',
-            WebkitLineClamp: 3,
+            WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
             display: '-webkit-box',
           }}
@@ -71,6 +73,7 @@ const MovieCard = ({ movie, fromWatchList }) => {
 MovieCard.propTypes = {
   movie: PropTypes.object,
   fromWatchList: PropTypes.bool,
+  refetch: PropTypes.func,
 };
 
 export default MovieCard;

@@ -3,6 +3,8 @@ import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import MovieCard from '../movie-card';
+import Shimmer from '../shimmer';
+import { useEffect, useRef } from 'react';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -12,33 +14,66 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const MovieList = ({ movies, fromWatchList }) => {
+const options = {
+  root: null,
+  rootMargin: '0px',
+  threshold: 1.0,
+};
+
+const MovieList = ({ movies, fromWatchList, refetch, loading, setPage }) => {
+  const ref = useRef(null);
+  // const loadMoreButton = ref.current;
+
+  useEffect(() => {
+    if (loading) return;
+    const observer = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      if (entry && entry.isIntersecting) {
+        console.log('intersecting');
+        // setPage((page) => page + 1);
+      }
+    }, options);
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) observer.disconnect(ref.current);
+    };
+  }, [loading]);
+
+  if (loading) {
+    return <Shimmer />;
+  }
   return (
-    <Grid
-      container
-      justifyContent={'center'}
-      spacing={3}
-      sx={{ marginTop: '2px' }}
-    >
-      {movies.map((movie) => {
-        return (
-          <Grid item key={movie.id}>
-            <Item>
-              <MovieCard
-                movie={movie}
-                fromWatchList={fromWatchList}
-              />
-            </Item>
-          </Grid>
-        );
-      })}
-    </Grid>
+    <>
+      <Grid container spacing={3} sx={{ marginTop: '2px', marginLeft: 'auto' }}>
+        {movies.map((movie) => {
+          return (
+            <Grid item key={movie.id}>
+              <Item>
+                <MovieCard
+                  movie={movie}
+                  fromWatchList={fromWatchList}
+                  refetch={refetch}
+                />
+              </Item>
+            </Grid>
+          );
+        })}
+      </Grid>
+      <button ref={ref}>Load More</button>
+    </>
   );
 };
 
 MovieList.propTypes = {
   movies: PropTypes.array,
   fromWatchList: PropTypes.bool,
+  refetch: PropTypes.func,
+  setPage: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
 export default MovieList;

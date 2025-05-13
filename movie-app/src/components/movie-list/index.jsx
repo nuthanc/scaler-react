@@ -14,34 +14,28 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const options = {
-  root: null,
-  rootMargin: '0px',
-  threshold: 1.0,
-};
-
 const MovieList = ({ movies, fromWatchList, refetch, loading, setPage }) => {
   const ref = useRef(null);
-  // const loadMoreButton = ref.current;
 
   useEffect(() => {
     if (loading) return;
     const observer = new IntersectionObserver((entries) => {
       const entry = entries[0];
       if (entry && entry.isIntersecting) {
-        console.log('intersecting');
-        // setPage((page) => page + 1);
+        setPage((page) => page + 1);
       }
-    }, options);
+    });
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const loadMoreButton = ref.current;
+
+    if (loadMoreButton) {
+      observer.observe(loadMoreButton);
     }
 
     return () => {
-      if (ref.current) observer.disconnect(ref.current);
+      if (loadMoreButton) observer.disconnect(loadMoreButton);
     };
-  }, [loading]);
+  }, [loading, setPage]);
 
   if (loading) {
     return <Shimmer />;
